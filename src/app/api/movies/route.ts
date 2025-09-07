@@ -1,9 +1,23 @@
+import type { NextApiRequest } from 'next';
+
 const API_KEY = process.env.TMDB_API_KEY;
 
-export async function GET() {
+export async function GET(req: NextApiRequest) {
   try {
+    if (!req.url) {
+      return new Response(
+        JSON.stringify({ error: 'Request URL is undefined' }),
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const page = searchParams.get('page') || '1';
+
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?&api_key=${API_KEY}`
+      `https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${API_KEY}`
     );
     if (!response.ok) {
       return new Response(
