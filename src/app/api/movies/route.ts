@@ -2,6 +2,16 @@ import type { NextApiRequest } from 'next';
 
 const API_KEY = process.env.TMDB_API_KEY;
 
+type Movie = {
+  id: number;
+  title?: string;
+  name?: string;
+  release_date?: string;
+  poster_path?: string;
+  overview?: string;
+  imdb_id?: string;
+};
+
 export async function GET(req: NextApiRequest) {
   try {
     if (!req.url) {
@@ -14,21 +24,44 @@ export async function GET(req: NextApiRequest) {
     }
 
     const { searchParams } = new URL(req.url);
-    const page = searchParams.get('page') || '1';
+    const query = searchParams.get('query');
 
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${API_KEY}`
+    // Search query
+    const searchQuery = await fetch(
+      `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
+        query || ''
+      )}&api_key=${API_KEY}`
     );
-    if (!response.ok) {
+
+    if (!searchQuery.ok) {
       return new Response(
-        JSON.stringify({ error: `TMDB error: ${response.statusText}` }),
+        JSON.stringify({ error: `TMDB error: ${searchQuery.statusText}` }),
         {
-          status: response.status,
+          status: searchQuery.status,
         }
       );
     }
-    const data = await response.json();
-    return new Response(JSON.stringify(data), {
+    const searchResults = await searchQuery.json();
+
+    // Find imdb_id for 'Read More' link
+    if (searchResults.results && Array.isArray(searchResults.results)) {
+      const movies = searchResults.results.slice(0, 10);
+      const moviesWithImdb = await Promise.all(
+        movies.map(async (movie: Movie) => {
+          const detailRes = await fetch(
+            `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${API_KEY}`
+          );
+          if (detailRes.ok) {
+            const detailData = await detailRes.json();
+            return { ...movie, imdb_id: detailData.imdb_id };
+          }
+          return movie;
+        })
+      );
+      searchResults.results = moviesWithImdb;
+    }
+
+    return new Response(JSON.stringify(searchResults), {
       status: 200,
     });
   } catch (error) {
