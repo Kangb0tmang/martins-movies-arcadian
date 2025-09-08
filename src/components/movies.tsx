@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-import Login from './login';
+import Header from './header';
 import Search from './search';
 import Watched from './watched';
 import Pagination from './pagination';
+import Footer from './footer';
 
 interface MovieResult {
   page: number;
@@ -67,12 +68,7 @@ export default function Movies() {
 
   return (
     <div>
-      <div className='flex mb-10 justify-between'>
-        <h1 className='text-4xl mr-4 font-bold text-center sm:text-left'>
-          Martin&apos;s Movies
-        </h1>
-        <Login />
-      </div>
+      <Header />
       <Search search={search} setSearch={setSearch} />
       {loading && <p>Loading...</p>}
       {movieResult && movieResult.results.length === 0 && (
@@ -122,6 +118,7 @@ export default function Movies() {
         page={page}
         totalPages={movieResult?.total_pages}
       />
+      <Footer />
     </div>
   );
 }
