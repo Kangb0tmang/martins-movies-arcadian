@@ -20,7 +20,9 @@ export default function Pagination({
         )}`}
         prefetch={false}
         scroll={false}
-        className={`mr-4${page === 1 ? ' opacity-50 pointer-events-none' : ''}`}
+        className={`mr-4${
+          page === 1 ? ' opacity-50 pointer-events-none' : ''
+        } hover:text-[var(--color-movify-primary)] transition-colors`}
       >
         Previous Page
       </Link>
@@ -33,7 +35,7 @@ export default function Pagination({
           totalPages && page === totalPages
             ? ' opacity-50 pointer-events-none'
             : ''
-        }`}
+        } hover:text-[var(--color-movify-primary)] transition-colors`}
       >
         Next Page
       </Link>

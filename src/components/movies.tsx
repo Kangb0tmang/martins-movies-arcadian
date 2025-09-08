@@ -87,13 +87,13 @@ export default function Movies() {
               }}
             >
               <div className='self-end max-w-full p-5 py-7 text-center bg-gradient-to-t from-black/90 via-black/60 to-transparent'>
-                <h2 className='mb-6 text-3xl md:text-4xl overflow-ellipsis'>
+                <h2 className='mb-6 text-3xl md:text-4xl overflow-ellipsis text-white'>
                   {movie.title}
                 </h2>
-                <p className='mb-4 overflow-ellipsis line-clamp-2'>
+                <p className='mb-4 overflow-ellipsis line-clamp-2 text-white'>
                   {movie.overview}
                 </p>
-                <p className='mb-6 text-2xl'>
+                <p className='mb-6 text-2xl text-white'>
                   Rating:{' '}
                   {movie.vote_average && `${movie.vote_average.toFixed(2)}`}
                   /10
@@ -103,7 +103,7 @@ export default function Movies() {
                     href={`https://www.imdb.com/title/${movie.imdb_id}`}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='bg-[var(--color-movify-primary)] px-4 py-2 rounded text-white text-lg'
+                    className='bg-[var(--color-movify-primary)] hover:bg-[var(--color-movify-primary-darken)] transition-colors px-4 py-2 rounded text-white text-lg'
                   >
                     Read More
                   </Link>

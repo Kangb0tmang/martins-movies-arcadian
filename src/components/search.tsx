@@ -31,9 +31,9 @@ export default function Search({ search, setSearch }: SearchProps) {
       />
       <button
         type='submit'
-        className='px-4 py-2 rounded hover:cursor-pointer bg-[var(--color-movify-secondary)]'
+        className='px-4 py-2 rounded hover:cursor-pointer text-white bg-[var(--color-movify-secondary)] hover:bg-[var(--color-movify-secondary-darken)] transition-colors'
       >
-        Submit
+        Search
       </button>
     </Form>
   );

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 export default function Login() {
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
@@ -50,14 +49,14 @@ export default function Login() {
   }, []);
 
   return (
-    <div className='self-center text-center sm:text-left'>
+    <div className='self-center text-center lg:text-left'>
       {guestSessionId ? (
-        <div className='flex flex-col sm:flex-row'>
-          <p className='mr-2 text-green-700'>Guest session active</p>
+        <div className='flex flex-col xl:flex-row'>
+          <p className='lg:mr-2 text-green-700'>Guest session active</p>
           <button
             type='button'
             onClick={handleGuestLogout}
-            className='sm:border-l-[2] sm:pl-2 hover:cursor-pointer'
+            className='xl:border-l-[2] xl:pl-2 hover:cursor-pointer'
           >
             Logout
           </button>
@@ -66,7 +65,7 @@ export default function Login() {
         <button
           type='button'
           onClick={handleGuestLogin}
-          className='bg-blue-600 text-white px-4 py-2 rounded hover:cursor-pointer'
+          className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded hover:cursor-pointer transition-colors'
         >
           Login as Guest
         </button>
