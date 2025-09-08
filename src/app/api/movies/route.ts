@@ -10,6 +10,7 @@ type Movie = {
   poster_path?: string;
   overview?: string;
   imdb_id?: string;
+  vote_average?: number;
 };
 
 export async function GET(req: NextApiRequest) {
@@ -26,6 +27,73 @@ export async function GET(req: NextApiRequest) {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get('query');
     const page = searchParams.get('page') || '1';
+
+    // Guest session
+    if (searchParams.get('guest_session') === 'true') {
+      const guestRes = await fetch(
+        `https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${API_KEY}`
+      );
+      const guestData = await guestRes.json();
+      if (guestRes.ok && guestData.success && guestData.guest_session_id) {
+        return new Response(
+          JSON.stringify({
+            guest_session_id: guestData.guest_session_id,
+            success: true,
+          }),
+          { status: 200 }
+        );
+      } else {
+        return new Response(
+          JSON.stringify({
+            error: 'Failed to create guest session',
+            success: false,
+          }),
+          { status: 500 }
+        );
+      }
+    }
+
+    // Watched movies for guest session
+    if (searchParams.get('watched_movies') === 'true') {
+      const guestSessionId = searchParams.get('guest_session_id');
+      if (!guestSessionId) {
+        return new Response(
+          JSON.stringify({ error: 'Missing guest_session_id' }),
+          { status: 400 }
+        );
+      }
+      const watchedRes = await fetch(
+        `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${API_KEY}`
+      );
+      const watchedData = await watchedRes.json();
+      if (watchedRes.ok && Array.isArray(watchedData.results)) {
+        return new Response(
+          JSON.stringify({
+            watched: watchedData.results.map((m: { id: number }) => m.id),
+            success: true,
+          }),
+          { status: 200 }
+        );
+      } else if (watchedRes.ok && watchedData.results === undefined) {
+        // Empty array if no watched movies
+        return new Response(
+          JSON.stringify({
+            watched: [],
+            success: true,
+          }),
+          { status: 200 }
+        );
+      } else {
+        return new Response(
+          JSON.stringify({
+            error: 'Failed to fetch watched movies',
+            success: false,
+            watched: [],
+          }),
+          { status: 200 }
+        );
+      }
+    }
 
     // Search query
     const searchQuery = await fetch(
@@ -72,5 +140,78 @@ export async function GET(req: NextApiRequest) {
     return new Response(JSON.stringify({ error: `500 error: ${message}` }), {
       status: 500,
     });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const { movieId, guestSessionId } = await req.json();
+
+    if (!movieId || !guestSessionId) {
+      return new Response(
+        JSON.stringify({ error: 'Missing movieId or guestSessionId' }),
+        { status: 400 }
+      );
+    }
+
+    const tmdbRes = await fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/rating?api_key=${API_KEY}&guest_session_id=${guestSessionId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value: 10 }),
+      }
+    );
+    const tmdbData = await tmdbRes.json();
+    if (tmdbRes.ok) {
+      return new Response(JSON.stringify({ success: true, tmdb: tmdbData }), {
+        status: 200,
+      });
+    } else {
+      return new Response(
+        JSON.stringify({ error: 'Failed to rate movie', tmdb: tmdbData }),
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: 'Server error', detail: String(error) }),
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { movieId, guestSessionId } = await req.json();
+
+    if (!movieId || !guestSessionId) {
+      return new Response(
+        JSON.stringify({ error: 'Missing movieId or guestSessionId' }),
+        { status: 400 }
+      );
+    }
+
+    const tmdbRes = await fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/rating?api_key=${API_KEY}&guest_session_id=${guestSessionId}`,
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+    if (tmdbRes.ok) {
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+    } else {
+      const tmdbData = await tmdbRes.json();
+      return new Response(
+        JSON.stringify({ error: 'Failed to unwatch movie', tmdb: tmdbData }),
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: 'Server error', detail: String(error) }),
+      { status: 500 }
+    );
   }
 }

@@ -5,7 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import Login from './login';
 import Search from './search';
+import Watched from './watched';
 import Pagination from './pagination';
 
 interface MovieResult {
@@ -26,6 +28,7 @@ interface Movie {
   poster_path?: string;
   overview?: string;
   imdb_id?: string;
+  vote_average?: number;
 }
 
 export default function Movies() {
@@ -68,6 +71,7 @@ export default function Movies() {
 
   return (
     <div>
+      <Login />
       <Search search={search} setSearch={setSearch} />
       {loading && <p>Loading...</p>}
       {movieResult && movieResult.results.length === 0 && (
@@ -75,19 +79,24 @@ export default function Movies() {
       )}
       {movieList &&
         movieList.results.map((movie) => (
-          <div key={movie.id} className='mb-5'>
+          <div key={movie.id} className='mb-4'>
             <h2>{movie.title}</h2>
             <p>Release Date: {movie.release_date}</p>
             {movie.poster_path && (
               <Image
                 src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                 alt={movie.title || ''}
-                className='w-100 h-auto'
+                className='max-w-100 h-auto'
                 width={100}
                 height={150}
               />
             )}
             <p>{movie.overview}</p>
+            <p>
+              Rating: {movie.vote_average && `${movie.vote_average.toFixed(2)}`}
+              /10
+            </p>
+            <Watched movieId={movie.id} />
             {movie.imdb_id && (
               <Link
                 href={`https://www.imdb.com/title/${movie.imdb_id}`}
