@@ -12,7 +12,7 @@ export default function Pagination({
   totalPages,
 }: PaginationProps) {
   return (
-    <div className='flex align-middle justify-center mb-4'>
+    <div className='flex align-middle justify-center mb-4 text-lg sm:text-2xl'>
       <Link
         href={`?query=${encodeURIComponent(search)}&page=${Math.max(
           1,

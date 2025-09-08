@@ -59,7 +59,7 @@ export default function Watched({ movieId }: WatchedProps) {
           watched.includes(movieId) ? 'Mark as unwatched' : 'Mark as watched'
         }
         onClick={() => toggleWatched(movieId)}
-        className={`btn-heart ${
+        className={`${
           watched.includes(movieId) ? 'text-red-500' : 'text-gray-300'
         } hover:cursor-pointer text-6xl`}
         disabled={!guestSessionId}

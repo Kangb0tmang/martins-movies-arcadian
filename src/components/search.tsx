@@ -20,16 +20,21 @@ export default function Search({ search, setSearch }: SearchProps) {
     <Form
       action=''
       onSubmit={handleSearch}
-      className='flex align-center justify-center mb-4'
+      className='flex align-center justify-center mb-10'
     >
       <input
         name='query'
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder='Search for a movie...'
-        className='border border-gray-300 mb-2 mr-2 p-2'
+        className='border border-gray-300 bg-white text-black mr-2 p-2 rounded'
       />
-      <button type='submit'>Submit</button>
+      <button
+        type='submit'
+        className='px-4 py-2 rounded hover:cursor-pointer bg-[var(--color-movify-secondary)]'
+      >
+        Submit
+      </button>
     </Form>
   );
 }

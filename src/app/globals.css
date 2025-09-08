@@ -25,16 +25,6 @@ body {
 }
 
 @layer components {
-  .btn-heart {
-    background: none;
-    border: none;
-    cursor: var(--cursor-pointer);
-    font-size: var(--text-2xl);
-    vertical-align: var(--vertical-align-middle);
-    line-height: var(--leading-none);
-    padding: var(--p-0);
-    margin-left: var(--ml-1);
-  }
   .overflow-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
