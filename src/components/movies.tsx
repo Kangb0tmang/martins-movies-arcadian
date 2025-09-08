@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import Login from './login';
@@ -68,13 +67,18 @@ export default function Movies() {
 
   return (
     <div>
-      <Login />
+      <div className='flex mb-10 justify-between'>
+        <h1 className='text-4xl mr-4 font-bold text-center sm:text-left'>
+          Martin&apos;s Movies
+        </h1>
+        <Login />
+      </div>
       <Search search={search} setSearch={setSearch} />
       {loading && <p>Loading...</p>}
       {movieResult && movieResult.results.length === 0 && (
         <p>No movies found.</p>
       )}
-      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mb-4'>
+      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mb-10'>
         {movieList &&
           movieList.results.map((movie) => (
             <div
@@ -103,7 +107,7 @@ export default function Movies() {
                     href={`https://www.imdb.com/title/${movie.imdb_id}`}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='bg-[var(--color-movify-primary)] text-white px-4 py-2 rounded text-lg'
+                    className='bg-[var(--color-movify-primary)] px-4 py-2 rounded text-white text-lg'
                   >
                     Read More
                   </Link>

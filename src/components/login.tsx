@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Login() {
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
@@ -23,6 +24,23 @@ export default function Login() {
     }
   }
 
+  async function handleGuestLogout() {
+    setGuestError(null);
+    try {
+      if (guestSessionId) {
+        await fetch(
+          `/api/movies?delete_guest_session=true&guest_session_id=${guestSessionId}`
+        );
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('guest_session_id');
+        }
+        setGuestSessionId(null);
+      }
+    } catch {
+      setGuestError('Failed to delete guest session.');
+    }
+  }
+
   useEffect(() => {
     const stored =
       typeof window !== 'undefined'
@@ -32,14 +50,23 @@ export default function Login() {
   }, []);
 
   return (
-    <div className='mb-4'>
+    <div className='self-center text-center sm:text-left'>
       {guestSessionId ? (
-        <span className='text-green-700'>Guest session active</span>
+        <div className='flex flex-col sm:flex-row'>
+          <p className='mr-2 text-green-700'>Guest session active</p>
+          <button
+            type='button'
+            onClick={handleGuestLogout}
+            className='sm:border-l-[2] sm:pl-2 hover:cursor-pointer'
+          >
+            Logout
+          </button>
+        </div>
       ) : (
         <button
           type='button'
           onClick={handleGuestLogin}
-          className='bg-blue-600 text-white px-4 py-2 rounded'
+          className='bg-blue-600 text-white px-4 py-2 rounded hover:cursor-pointer'
         >
           Login as Guest
         </button>

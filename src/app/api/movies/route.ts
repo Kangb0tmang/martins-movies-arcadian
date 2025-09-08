@@ -52,6 +52,57 @@ export async function GET(req: NextApiRequest) {
       }
     }
 
+    // Delete guest session
+    if (searchParams.get('delete_guest_session') === 'true') {
+      const guestSessionId = searchParams.get('guest_session_id');
+      if (!guestSessionId) {
+        return new Response(
+          JSON.stringify({ error: 'Missing guest_session_id' }),
+          { status: 400 }
+        );
+      }
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Guest session deleted on client side.',
+        }),
+        { status: 200 }
+      );
+    }
+
+    // Delete authenticated session (using TMDB API)
+    if (searchParams.get('delete_session') === 'true') {
+      const sessionId = searchParams.get('session_id');
+      if (!sessionId) {
+        return new Response(JSON.stringify({ error: 'Missing session_id' }), {
+          status: 400,
+        });
+      }
+      const tmdbRes = await fetch(
+        `https://api.themoviedb.org/3/authentication/session?api_key=${API_KEY}`,
+        {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId }),
+        }
+      );
+      const tmdbData = await tmdbRes.json();
+      if (tmdbRes.ok && tmdbData.success) {
+        return new Response(
+          JSON.stringify({ success: true, message: 'Session deleted.' }),
+          { status: 200 }
+        );
+      } else {
+        return new Response(
+          JSON.stringify({
+            error: 'Failed to delete session',
+            tmdb: tmdbData,
+          }),
+          { status: 500 }
+        );
+      }
+    }
+
     // Watched movies for guest session
     if (searchParams.get('watched_movies') === 'true') {
       const guestSessionId = searchParams.get('guest_session_id');
