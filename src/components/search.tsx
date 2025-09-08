@@ -17,7 +17,11 @@ export default function Search({ search, setSearch }: SearchProps) {
   }
 
   return (
-    <Form action='' onSubmit={handleSearch}>
+    <Form
+      action=''
+      onSubmit={handleSearch}
+      className='flex align-center justify-center mb-4'
+    >
       <input
         name='query'
         value={search}

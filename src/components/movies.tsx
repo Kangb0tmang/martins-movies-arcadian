@@ -24,7 +24,6 @@ interface Movie {
   id: number;
   title?: string;
   name?: string;
-  release_date?: string;
   poster_path?: string;
   overview?: string;
   imdb_id?: string;
@@ -67,8 +66,6 @@ export default function Movies() {
     results: movieResult?.results || [],
   };
 
-  console.log('Movie Results:', movieResult);
-
   return (
     <div>
       <Login />
@@ -77,38 +74,45 @@ export default function Movies() {
       {movieResult && movieResult.results.length === 0 && (
         <p>No movies found.</p>
       )}
-      {movieList &&
-        movieList.results.map((movie) => (
-          <div key={movie.id} className='mb-4'>
-            <h2>{movie.title}</h2>
-            <p>Release Date: {movie.release_date}</p>
-            {movie.poster_path && (
-              <Image
-                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                alt={movie.title || ''}
-                className='max-w-100 h-auto'
-                width={100}
-                height={150}
-              />
-            )}
-            <p>{movie.overview}</p>
-            <p>
-              Rating: {movie.vote_average && `${movie.vote_average.toFixed(2)}`}
-              /10
-            </p>
-            <Watched movieId={movie.id} />
-            {movie.imdb_id && (
-              <Link
-                href={`https://www.imdb.com/title/${movie.imdb_id}`}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-blue-600 underline'
-              >
-                Read More
-              </Link>
-            )}
-          </div>
-        ))}
+      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mb-4'>
+        {movieList &&
+          movieList.results.map((movie) => (
+            <div
+              key={movie.id}
+              className='relative flex h-full w-full min-h-[500px] rounded bg-cover bg-top bg-no-repeat object-cover'
+              style={{
+                backgroundImage: movie.poster_path
+                  ? `url(https://image.tmdb.org/t/p/w200${movie.poster_path})`
+                  : 'linear-gradient(135deg, var(--color-movify-primary) 0%, var(--color-movify-secondary) 100%)',
+              }}
+            >
+              <div className='self-end max-w-full p-5 py-7 text-center bg-gradient-to-t from-black/90 via-black/60 to-transparent'>
+                <h2 className='mb-6 text-3xl md:text-4xl overflow-ellipsis'>
+                  {movie.title}
+                </h2>
+                <p className='mb-4 overflow-ellipsis line-clamp-2'>
+                  {movie.overview}
+                </p>
+                <p className='mb-6 text-2xl'>
+                  Rating:{' '}
+                  {movie.vote_average && `${movie.vote_average.toFixed(2)}`}
+                  /10
+                </p>
+                {movie.imdb_id && (
+                  <Link
+                    href={`https://www.imdb.com/title/${movie.imdb_id}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='bg-[var(--color-movify-primary)] text-white px-4 py-2 rounded text-lg'
+                  >
+                    Read More
+                  </Link>
+                )}
+              </div>
+              <Watched movieId={movie.id} />
+            </div>
+          ))}
+      </div>
       <Pagination
         search={search}
         page={page}

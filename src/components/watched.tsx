@@ -53,7 +53,7 @@ export default function Watched({ movieId }: WatchedProps) {
   }
 
   return (
-    <div>
+    <div className='absolute bottom-4 right-4'>
       <button
         aria-label={
           watched.includes(movieId) ? 'Mark as unwatched' : 'Mark as watched'
@@ -61,7 +61,7 @@ export default function Watched({ movieId }: WatchedProps) {
         onClick={() => toggleWatched(movieId)}
         className={`btn-heart ${
           watched.includes(movieId) ? 'text-red-500' : 'text-gray-300'
-        }`}
+        } hover:cursor-pointer text-6xl`}
         disabled={!guestSessionId}
         title={
           guestSessionId
