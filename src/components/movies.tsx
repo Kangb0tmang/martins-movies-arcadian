@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Form from 'next/form';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import Search from './search';
+import Pagination from './pagination';
 
 interface MovieResult {
   page: number;
@@ -27,7 +29,6 @@ interface Movie {
 }
 
 export default function Movies() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const queryParam = searchParams.get('query') || '';
   const pageParam = searchParams.get('page');
@@ -63,25 +64,11 @@ export default function Movies() {
     results: movieResult?.results || [],
   };
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    router.push(
-      `${search ? `?query=${encodeURIComponent(search)}&page=1` : ''}`
-    );
-  }
+  console.log('Movie Results:', movieResult);
 
   return (
     <div>
-      <Form action='' onSubmit={handleSearch}>
-        <input
-          name='query'
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder='Search for a movie...'
-          className='border border-gray-300 mb-2 mr-2 p-2'
-        />
-        <button type='submit'>Submit</button>
-      </Form>
+      <Search search={search} setSearch={setSearch} />
       {loading && <p>Loading...</p>}
       {movieResult && movieResult.results.length === 0 && (
         <p>No movies found.</p>
@@ -113,34 +100,11 @@ export default function Movies() {
             )}
           </div>
         ))}
-      <div className='mb-4'>
-        <Link
-          href={`?query=${encodeURIComponent(search)}&page=${Math.max(
-            1,
-            page - 1
-          )}`}
-          prefetch={false}
-          scroll={false}
-          className={`mr-4${
-            page === 1 ? ' opacity-50 pointer-events-none' : ''
-          }`}
-        >
-          Previous Page
-        </Link>
-        <span className='my-0 mx-4'>Page {movieResult?.page || page}</span>
-        <Link
-          href={`?query=${encodeURIComponent(search)}&page=${page + 1}`}
-          prefetch={false}
-          scroll={false}
-          className={`ml-4${
-            page === movieResult?.total_pages
-              ? ' opacity-50 pointer-events-none'
-              : ''
-          }`}
-        >
-          Next Page
-        </Link>
-      </div>
+      <Pagination
+        search={search}
+        page={page}
+        totalPages={movieResult?.total_pages}
+      />
     </div>
   );
 }
