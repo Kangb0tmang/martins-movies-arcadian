@@ -25,12 +25,13 @@ export async function GET(req: NextApiRequest) {
 
     const { searchParams } = new URL(req.url);
     const query = searchParams.get('query');
+    const page = searchParams.get('page') || '1';
 
     // Search query
     const searchQuery = await fetch(
       `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
         query || ''
-      )}&api_key=${API_KEY}`
+      )}&page=${page}&api_key=${API_KEY}`
     );
 
     if (!searchQuery.ok) {
@@ -43,9 +44,10 @@ export async function GET(req: NextApiRequest) {
     }
     const searchResults = await searchQuery.json();
 
-    // Find imdb_id for 'Read More' link
+    // Find imdb_id for 'Read More' link from search results
     if (searchResults.results && Array.isArray(searchResults.results)) {
-      const movies = searchResults.results.slice(0, 10);
+      // 6 movies per page
+      const movies = searchResults.results.slice(0, 6);
       const moviesWithImdb = await Promise.all(
         movies.map(async (movie: Movie) => {
           const detailRes = await fetch(
