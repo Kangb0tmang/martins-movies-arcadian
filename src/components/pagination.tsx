@@ -26,7 +26,7 @@ export default function Pagination({
       >
         Previous Page
       </Link>
-      <span className='my-0 mx-4'>Page {page}</span>
+      <span className='my-0 mx-10'>{page}</span>
       <Link
         href={`?query=${encodeURIComponent(search)}&page=${page + 1}`}
         prefetch={false}

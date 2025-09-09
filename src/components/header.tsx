@@ -83,7 +83,7 @@ export default function Header() {
               className='hover:text-[var(--color-movify-primary)] transition-colors'
               onClick={() => setOpen(false)}
             >
-              Celebrities
+              Forum
             </Link>
           </li>
           <li>

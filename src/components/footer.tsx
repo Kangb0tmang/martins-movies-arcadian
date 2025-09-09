@@ -34,7 +34,7 @@ export default function Footer() {
                 href='#'
                 className='hover:text-[var(--color-movify-primary)] transition-colors'
               >
-                Forum
+                Contact Us
               </Link>
             </li>
             <li>
@@ -42,7 +42,15 @@ export default function Footer() {
                 href='#'
                 className='hover:text-[var(--color-movify-primary)] transition-colors'
               >
-                News
+                My Account
+              </Link>
+            </li>
+            <li>
+              <Link
+                href='#'
+                className='hover:text-[var(--color-movify-primary)] transition-colors'
+              >
+                Watch List
               </Link>
             </li>
           </ul>

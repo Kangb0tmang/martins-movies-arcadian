@@ -1,5 +1,5 @@
 import Header from '../components/header';
-import Movies from '../components/movies';
+import Movies from '../components/movies/listing-page';
 import Footer from '../components/footer';
 
 export default function Home() {
