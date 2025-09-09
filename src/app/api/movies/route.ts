@@ -204,6 +204,7 @@ export async function POST(req: Request) {
       );
     }
 
+    // Mark the movie as watched by adding a rating?
     const tmdbRes = await fetch(
       `https://api.themoviedb.org/3/movie/${movieId}/rating?api_key=${API_KEY}&guest_session_id=${guestSessionId}`,
       {

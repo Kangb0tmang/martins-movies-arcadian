@@ -2,6 +2,10 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+This project uses `node v22` (from .nvmrc)
+
+Install packages: `npm install`
+
 First, run the development server:
 
 ```bash
@@ -12,6 +16,12 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
+
+Add your tmdb API key to a `.env` file
+
+```
+TMDB_API_KEY={YOUR_API_KEY_HERE}
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
