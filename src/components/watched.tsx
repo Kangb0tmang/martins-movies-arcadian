@@ -36,19 +36,27 @@ export default function Watched({ movieId }: WatchedProps) {
     if (!guestSessionId) return;
     const isWatched = watched.includes(movieId);
     if (isWatched) {
-      await fetch('/api/movies', {
+      const res = await fetch('/api/movies', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ movieId, guestSessionId }),
       });
-      setWatched((prev) => prev.filter((id) => id !== movieId));
+      if (res.ok) {
+        setWatched((prev) => prev.filter((id) => id !== movieId));
+      } else {
+        console.error('Failed to remove movie from watched list');
+      }
     } else {
-      await fetch('/api/movies', {
+      const res = await fetch('/api/movies', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ movieId, guestSessionId }),
       });
-      setWatched((prev) => [...prev, movieId]);
+      if (res.ok) {
+        setWatched((prev) => [...prev, movieId]);
+      } else {
+        console.error('Failed to add movie to watched list');
+      }
     }
   }
 
