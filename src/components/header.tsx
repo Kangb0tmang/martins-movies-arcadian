@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import Link from 'next/link';
 import Login from './login';
@@ -7,7 +9,7 @@ export default function Header() {
 
   return (
     <header className='w-full mb-10'>
-      <nav className='container mx-auto flex flex-col lg:flex-row items-center justify-between px-4 py-4 relative'>
+      <nav className='container flex flex-col lg:flex-row items-center justify-between px-4 py-4 relative'>
         <div className='flex items-center w-full lg:w-auto justify-between'>
           <h1 className='text-4xl mr-4 font-bold text-center lg:text-left'>
             Martin&apos;s Movies

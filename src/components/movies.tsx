@@ -4,11 +4,9 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-import Header from './header';
 import Search from './search';
 import Watched from './watched';
 import Pagination from './pagination';
-import Footer from './footer';
 
 interface MovieResult {
   page: number;
@@ -68,7 +66,6 @@ export default function Movies() {
 
   return (
     <div>
-      <Header />
       <Search search={search} setSearch={setSearch} />
       {loading && <p>Loading...</p>}
       {movieResult && movieResult.results.length === 0 && (
@@ -86,7 +83,7 @@ export default function Movies() {
                   : 'linear-gradient(135deg, var(--color-movify-primary) 0%, var(--color-movify-secondary) 100%)',
               }}
             >
-              <div className='self-end max-w-full p-5 py-7 text-center bg-gradient-to-t from-black/90 via-black/60 to-transparent'>
+              <div className='self-end max-w-full w-full p-5 py-7 text-center bg-gradient-to-t from-black/90 via-black/60 to-transparent'>
                 <h2 className='mb-6 text-3xl md:text-4xl overflow-ellipsis text-white'>
                   {movie.title}
                 </h2>
@@ -118,7 +115,6 @@ export default function Movies() {
         page={page}
         totalPages={movieResult?.total_pages}
       />
-      <Footer />
     </div>
   );
 }

@@ -20,7 +20,7 @@ export default function Pagination({
         )}`}
         prefetch={false}
         scroll={false}
-        className={`mr-4${
+        className={`${
           page === 1 ? ' opacity-50 pointer-events-none' : ''
         } hover:text-[var(--color-movify-primary)] transition-colors`}
       >

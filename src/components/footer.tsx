@@ -6,7 +6,7 @@ export default function Footer() {
       <div className='container mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-10'>
         <div className='flex flex-col items-start md:col-span-1'>
           <div className='text-sm mt-2'>
-            &copy; {new Date().getFullYear()} Martin&apos; Movies. All Rights
+            &copy; {new Date().getFullYear()} Martin&apos;s Movies. All Rights
             Reserved.
           </div>
         </div>
