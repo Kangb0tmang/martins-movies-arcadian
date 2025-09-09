@@ -56,7 +56,7 @@ export default function Login() {
           <button
             type='button'
             onClick={handleGuestLogout}
-            className='xl:border-l-[2] xl:pl-2 hover:cursor-pointer'
+            className='xl:border-l-[2px] xl:pl-2 hover:cursor-pointer'
           >
             Logout
           </button>
