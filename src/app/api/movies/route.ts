@@ -34,13 +34,25 @@ export async function GET(req: NextApiRequest) {
       );
       const guestData = await guestRes.json();
       if (guestRes.ok && guestData.success && guestData.guest_session_id) {
-        return new Response(
-          JSON.stringify({
-            guest_session_id: guestData.guest_session_id,
-            success: true,
-          }),
-          { status: 200 }
-        );
+        const guestSessionId = guestData.guest_session_id;
+        const guestSessionIdPattern = /^[A-Za-z0-9_]{32}$/;
+        if (guestSessionIdPattern.test(guestSessionId)) {
+          return new Response(
+            JSON.stringify({
+              guest_session_id: guestSessionId,
+              success: true,
+            }),
+            { status: 200 }
+          );
+        } else {
+          return new Response(
+            JSON.stringify({
+              error: 'Invalid guest_session_id format received from TMDB',
+              success: false,
+            }),
+            { status: 500 }
+          );
+        }
       } else {
         return new Response(
           JSON.stringify({
